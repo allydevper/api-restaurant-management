@@ -29,7 +29,7 @@ export class DishesService {
     const { data, error } = await this.supabase
       .from('rm_dishes')
       .update(dish)
-      .eq('dishId', dishId);
+      .eq('dishid', dishId);
     return { data, error };
   }
 
@@ -37,7 +37,7 @@ export class DishesService {
     const { data, error } = await this.supabase
       .from('rm_dishes')
       .delete()
-      .eq('dishId', dishId);
+      .eq('dishid', dishId);
     return { data, error };
   }
 }

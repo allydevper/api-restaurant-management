@@ -18,7 +18,7 @@ export class DishesService {
       .from('rm_dishes')
       .select(`
         *,
-        rm_dishescategory (
+        dishescategory : rm_dishescategory (
           name
         )
       `);

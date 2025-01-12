@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { SupabaseService } from './supabase.service';
-import { SupabaseController } from './supabase.controller';
+import { OrdersController } from './orders.controller';
+import { OrderDetailsController } from './orderDetails.controller';
+import { TablesController } from './tables.controller';
+import { OrdersService } from './orders.service';
+import { OrderDetailsService } from './orderDetails.service';
+import { TablesService } from './tables.service';
 import { createClient } from '@supabase/supabase-js';
 
 @Module({
@@ -11,7 +15,11 @@ import { createClient } from '@supabase/supabase-js';
       envFilePath: '.env.dev',
     }),
   ],
-  controllers: [SupabaseController],
+  controllers: [
+    OrdersController,
+    OrderDetailsController,
+    TablesController,
+  ],
   providers: [
     {
       provide: 'SUPABASE_CLIENT',
@@ -22,7 +30,9 @@ import { createClient } from '@supabase/supabase-js';
         return createClient(supabaseUrl, supabaseKey);
       },
     },
-    SupabaseService,
+    OrdersService,
+    OrderDetailsService,
+    TablesService,
   ],
 })
-export class AppModule {}
+export class AppModule { }

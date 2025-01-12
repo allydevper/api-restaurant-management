@@ -15,6 +15,11 @@ export class DishesController {
     return this.dishesService.getDishes();
   }
 
+  @Get(':id')
+  async getDish(@Param('id') id: string) {
+    return this.dishesService.getDish(id);
+  }
+
   @Put(':id')
   async updateDish(@Param('id') id: string, @Body() dish) {
     return this.dishesService.updateDish(+id, dish);

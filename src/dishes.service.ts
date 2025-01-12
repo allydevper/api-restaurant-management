@@ -25,6 +25,15 @@ export class DishesService {
     return { data, error };
   }
 
+  async getDish(dishId: string) {
+    const { data, error } = await this.supabase
+      .from('rm_dishes')
+      .select('*')
+      .eq('dishid', dishId)
+      .single();
+    return { data, error };
+  }
+
   async updateDish(dishId, dish) {
     const { data, error } = await this.supabase
       .from('rm_dishes')

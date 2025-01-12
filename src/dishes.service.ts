@@ -16,7 +16,12 @@ export class DishesService {
   async getDishes() {
     const { data, error } = await this.supabase
       .from('rm_dishes')
-      .select('*');
+      .select(`
+        *,
+        rm_dishescategory (
+          name
+        )
+      `);
     return { data, error };
   }
 

@@ -15,6 +15,11 @@ export class TablesController {
     return this.tablesService.getTables();
   }
 
+  @Get(':id')
+  async getTable(@Param('id') id: string) {
+    return this.tablesService.getTableById(id);
+  }
+
   @Put(':id')
   async updateTable(@Param('id') id: string, @Body() table) {
     return this.tablesService.updateTable(+id, table);

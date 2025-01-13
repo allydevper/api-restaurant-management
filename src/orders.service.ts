@@ -20,6 +20,15 @@ export class OrdersService {
     return { data, error };
   }
 
+  async getOrderById(orderId: string) {
+    const { data, error } = await this.supabase
+      .from('rm_orders')
+      .select('*')
+      .eq('orderId', orderId)
+      .single();
+    return { data, error };
+  }
+
   async updateOrder(orderId, order) {
     const { data, error } = await this.supabase
       .from('rm_orders')

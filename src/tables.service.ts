@@ -20,6 +20,15 @@ export class TablesService {
     return { data, error };
   }
 
+  async getTableById(tableId: string) {
+    const { data, error } = await this.supabase
+      .from('rm_tables')
+      .select('*')
+      .eq('tableId', tableId)
+      .single();
+    return { data, error };
+  }
+
   async updateTable(tableId, table) {
     const { data, error } = await this.supabase
       .from('rm_tables')

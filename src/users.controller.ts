@@ -15,6 +15,11 @@ export class UsersController {
     return this.usersService.getUsers();
   }
 
+  @Get(':id')
+  async getUser(@Param('id') id: string) {
+    return this.usersService.getUserById(id);
+  }
+
   @Put(':id')
   async updateUser(@Param('id') id: string, @Body() user) {
     return this.usersService.updateUser(+id, user);

@@ -15,6 +15,11 @@ export class OrdersController {
     return this.ordersService.getOrders();
   }
 
+  @Get(':id')
+  async getOrder(@Param('id') id: string) {
+    return this.ordersService.getOrderById(id);
+  }
+
   @Put(':id')
   async updateOrder(@Param('id') id: string, @Body() order) {
     return this.ordersService.updateOrder(+id, order);

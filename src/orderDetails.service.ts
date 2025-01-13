@@ -20,6 +20,15 @@ export class OrderDetailsService {
     return { data, error };
   }
 
+  async getOrderDetailById(orderDetailId: string) {
+    const { data, error } = await this.supabase
+      .from('rm_order_details')
+      .select('*')
+      .eq('orderDetailId', orderDetailId)
+      .single();
+    return { data, error };
+  }
+
   async updateOrderDetail(orderDetailId, orderDetail) {
     const { data, error } = await this.supabase
       .from('rm_orderDetails')

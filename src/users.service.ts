@@ -20,6 +20,15 @@ export class UsersService {
     return { data, error };
   }
 
+  async getUserById(userId: string) {
+    const { data, error } = await this.supabase
+      .from('rm_users')
+      .select('*')
+      .eq('userId', userId)
+      .single();
+    return { data, error };
+  }
+
   async updateUser(userId, user) {
     const { data, error } = await this.supabase
       .from('rm_users')

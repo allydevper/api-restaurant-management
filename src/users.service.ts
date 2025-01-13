@@ -24,7 +24,7 @@ export class UsersService {
     const { data, error } = await this.supabase
       .from('rm_users')
       .select('*')
-      .eq('userId', userId)
+      .eq('userid', userId)
       .single();
     return { data, error };
   }
@@ -33,7 +33,7 @@ export class UsersService {
     const { data, error } = await this.supabase
       .from('rm_users')
       .update(user)
-      .eq('userId', userId);
+      .eq('userid', userId);
     return { data, error };
   }
 
@@ -41,7 +41,7 @@ export class UsersService {
     const { data, error } = await this.supabase
       .from('rm_users')
       .delete()
-      .eq('userId', userId);
+      .eq('userid', userId);
     return { data, error };
   }
 }

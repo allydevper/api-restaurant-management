@@ -24,7 +24,7 @@ export class OrdersService {
     const { data, error } = await this.supabase
       .from('rm_orders')
       .select('*')
-      .eq('orderId', orderId)
+      .eq('orderid', orderId)
       .single();
     return { data, error };
   }
@@ -33,7 +33,7 @@ export class OrdersService {
     const { data, error } = await this.supabase
       .from('rm_orders')
       .update(order)
-      .eq('orderId', orderId);
+      .eq('orderid', orderId);
     return { data, error };
   }
 
@@ -41,7 +41,7 @@ export class OrdersService {
     const { data, error } = await this.supabase
       .from('rm_orders')
       .delete()
-      .eq('orderId', orderId);
+      .eq('orderid', orderId);
     return { data, error };
   }
 }

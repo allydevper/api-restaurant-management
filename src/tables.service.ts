@@ -24,7 +24,7 @@ export class TablesService {
     const { data, error } = await this.supabase
       .from('rm_tables')
       .select('*')
-      .eq('tableId', tableId)
+      .eq('tableid', tableId)
       .single();
     return { data, error };
   }
@@ -33,7 +33,7 @@ export class TablesService {
     const { data, error } = await this.supabase
       .from('rm_tables')
       .update(table)
-      .eq('tableId', tableId);
+      .eq('tableid', tableId);
     return { data, error };
   }
 
@@ -41,7 +41,7 @@ export class TablesService {
     const { data, error } = await this.supabase
       .from('rm_tables')
       .delete()
-      .eq('tableId', tableId);
+      .eq('tableid', tableId);
     return { data, error };
   }
 }

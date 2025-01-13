@@ -1,47 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Inject } from '@nestjs/common';
+import { OrderDetail } from './models/orderDetail.model';
 
 @Injectable()
 export class OrderDetailsService {
   constructor(@Inject('SUPABASE_CLIENT') private readonly supabase: SupabaseClient) { }
 
-  async createOrderDetail(orderDetail) {
-    const { data, error } = await this.supabase
+  async createOrderDetail(orderDetail: OrderDetail): Promise<{ error?: any }> {
+    const { error } = await this.supabase
       .from('rm_orderDetails')
       .insert([orderDetail]);
-    return { data, error };
+    return { error };
   }
 
-  async getOrderDetails() {
+  async getOrderDetails(): Promise<{ data: OrderDetail[]; error?: any }> {
     const { data, error } = await this.supabase
       .from('rm_orderDetails')
       .select('*');
     return { data, error };
   }
 
-  async getOrderDetailById(orderDetailId: string) {
+  async getOrderDetailById(id: number): Promise<{ data?: OrderDetail; error?: any }> {
     const { data, error } = await this.supabase
-      .from('rm_order_details')
+      .from('rm_orderDetails')
       .select('*')
-      .eq('orderdetailid', orderDetailId)
+      .eq('orderdetailid', id)
       .single();
     return { data, error };
   }
 
-  async updateOrderDetail(orderDetailId, orderDetail) {
-    const { data, error } = await this.supabase
+  async updateOrderDetail(id: number, orderDetail: OrderDetail): Promise<{ error?: any }> {
+    const { error } = await this.supabase
       .from('rm_orderDetails')
       .update(orderDetail)
-      .eq('orderdetailid', orderDetailId);
-    return { data, error };
+      .eq('orderdetailid', id);
+    return { error };
   }
 
-  async deleteOrderDetail(orderDetailId) {
-    const { data, error } = await this.supabase
+  async deleteOrderDetail(id: number): Promise<{ error?: any }> {
+    const { error } = await this.supabase
       .from('rm_orderDetails')
       .delete()
-      .eq('orderdetailid', orderDetailId);
-    return { data, error };
+      .eq('orderdetailid', id);
+    return { error };
   }
 }

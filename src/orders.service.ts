@@ -1,47 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Inject } from '@nestjs/common';
+import { Order } from './models/order.model';
 
 @Injectable()
 export class OrdersService {
   constructor(@Inject('SUPABASE_CLIENT') private readonly supabase: SupabaseClient) { }
 
-  async createOrder(order) {
-    const { data, error } = await this.supabase
+  async createOrder(order: Order): Promise<{ error?: any }> {
+    const { error } = await this.supabase
       .from('rm_orders')
       .insert([order]);
-    return { data, error };
+    return { error };
   }
 
-  async getOrders() {
+  async getOrders(): Promise<{ data: Order[]; error?: any }> {
     const { data, error } = await this.supabase
       .from('rm_orders')
       .select('*');
     return { data, error };
   }
 
-  async getOrderById(orderId: string) {
+  async getOrderById(id: number): Promise<{ data?: Order; error?: any }> {
     const { data, error } = await this.supabase
       .from('rm_orders')
       .select('*')
-      .eq('orderid', orderId)
+      .eq('orderid', id)
       .single();
     return { data, error };
   }
 
-  async updateOrder(orderId, order) {
-    const { data, error } = await this.supabase
+  async updateOrder(id: number, order: Order): Promise<{ error?: any }> {
+    const { error } = await this.supabase
       .from('rm_orders')
       .update(order)
-      .eq('orderid', orderId);
-    return { data, error };
+      .eq('orderid', id);
+    return { error };
   }
 
-  async deleteOrder(orderId) {
-    const { data, error } = await this.supabase
+  async deleteOrder(id: number): Promise<{ error?: any }> {
+    const { error } = await this.supabase
       .from('rm_orders')
       .delete()
-      .eq('orderid', orderId);
-    return { data, error };
+      .eq('orderid', id);
+    return { error };
   }
 }

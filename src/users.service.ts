@@ -36,6 +36,8 @@ export class UsersService {
   }
 
   async updateUser(id: number, user: User): Promise<{ error?: any }> {
+    user.passwordhash = await bcrypt.hash(user.password, this.saltRounds);;
+    delete user.password;
     const { error } = await this.supabase
       .from('rm_users')
       .update(user)

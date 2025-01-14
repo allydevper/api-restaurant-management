@@ -1,47 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Inject } from '@nestjs/common';
+import { Table } from './models/table.model';
 
 @Injectable()
 export class TablesService {
   constructor(@Inject('SUPABASE_CLIENT') private readonly supabase: SupabaseClient) { }
 
-  async createTable(table) {
-    const { data, error } = await this.supabase
+  async createTable(table: Table): Promise<{ error?: any }> {
+    const { error } = await this.supabase
       .from('rm_tables')
       .insert([table]);
-    return { data, error };
+    return { error };
   }
 
-  async getTables() {
+  async getTables(): Promise<{ data: Table[]; error?: any }> {
     const { data, error } = await this.supabase
       .from('rm_tables')
       .select('*');
     return { data, error };
   }
 
-  async getTableById(tableId: string) {
+  async getTableById(id: number): Promise<{ data?: Table; error?: any }> {
     const { data, error } = await this.supabase
       .from('rm_tables')
       .select('*')
-      .eq('tableid', tableId)
+      .eq('tableid', id)
       .single();
     return { data, error };
   }
 
-  async updateTable(tableId, table) {
-    const { data, error } = await this.supabase
+  async updateTable(id: number, table: Table): Promise<{ error?: any }> {
+    const { error } = await this.supabase
       .from('rm_tables')
       .update(table)
-      .eq('tableid', tableId);
-    return { data, error };
+      .eq('tableid', id);
+    return { error };
   }
 
-  async deleteTable(tableId) {
-    const { data, error } = await this.supabase
+  async deleteTable(id: number): Promise<{ error?: any }> {
+    const { error } = await this.supabase
       .from('rm_tables')
       .delete()
-      .eq('tableid', tableId);
-    return { data, error };
+      .eq('tableid', id);
+    return { error };
   }
 }

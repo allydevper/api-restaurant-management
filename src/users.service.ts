@@ -2,12 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Inject } from '@nestjs/common';
 import { User } from './models/user.model';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(@Inject('SUPABASE_CLIENT') private readonly supabase: SupabaseClient) { }
+  private readonly saltRounds = 10;
 
   async createUser(user: User): Promise<{ error?: any }> {
+
+    user.passwordhash = await bcrypt.hash(user.password, this.saltRounds);;
+    delete user.password;
     const { error } = await this.supabase
       .from('rm_users')
       .insert([user]);

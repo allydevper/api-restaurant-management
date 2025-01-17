@@ -52,4 +52,30 @@ export class UsersService {
       .eq('userid', id);
     return { error };
   }
+
+  async login(username: string, password: string): Promise<{ data?: User; error?: any }> {
+    const { data, error } = await this.supabase
+      .from('rm_users')
+      .select('userid, username, passwordhash, role, createdat')
+      .eq('username', username)
+      .single();
+
+    if (error || !data) {
+      return { error: 'Usuario no encontrado' };
+    }
+
+    const isPasswordValid = await this.verifyPassword(password, data.passwordhash);
+    if (!isPasswordValid) {
+      return { error: 'Contraseña incorrecta' };
+    }
+
+    delete data.passwordhash;
+    delete data.createdat;
+
+    return { data: data as User };
+  }
+
+  private async verifyPassword(password: string, passwordHash: string): Promise<boolean> {
+    return await bcrypt.compare(password, passwordHash);
+  }
 }

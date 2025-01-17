@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Req, Res } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './models/user.model';
+import { Request, Response } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -29,5 +30,18 @@ export class UsersController {
   @Delete(':id')
   async deleteUser(@Param('id') id: number): Promise<{ error?: any }> {
     return this.usersService.deleteUser(id);
+  }
+
+  @Post('login')
+  async login(@Req() req: Request, @Res() res: Response): Promise<void> {
+    const { username, password } = req.body;
+    const { data, error } = await this.usersService.login(username, password);
+
+    if (error) {
+      res.status(400).json({error});
+      return;
+    }
+    res.status(200).json({data})
+    return;
   }
 }

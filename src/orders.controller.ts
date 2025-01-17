@@ -11,6 +11,11 @@ export class OrdersController {
     return this.ordersService.createOrder(order);
   }
 
+  @Post('details')
+  async createOrderWithDetails(@Body() order: Order): Promise<{ error?: any }> {
+    return this.ordersService.createOrderWithDetails(order);
+  }
+
   @Get()
   async getOrders(): Promise<{ data: Order[]; error?: any }> {
     return this.ordersService.getOrders();
@@ -24,6 +29,11 @@ export class OrdersController {
   @Put(':id')
   async updateOrder(@Param('id') id: number, @Body() order: Order): Promise<{ error?: any }> {
     return this.ordersService.updateOrder(id, order);
+  }
+
+  @Put('details')
+  async updateOrderWithDetails(@Body() order: Order): Promise<{ error?: any }> {
+    return this.ordersService.updateOrderWithDetails(order);
   }
 
   @Delete(':id')

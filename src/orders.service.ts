@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Inject } from '@nestjs/common';
 import { Order } from './models/order.model';
+import { OrderDetail } from './models/orderDetail.model';
 
 @Injectable()
 export class OrdersService {
@@ -36,16 +37,11 @@ export class OrdersService {
       }));
 
       const { error: detailsError } = await this.supabase
-        .from('rm_orderDetails')
+        .from('rm_orderdetails')
         .insert(detailsWithOrderId);
 
       if (detailsError) {
-        await this.supabase
-          .from('rm_orders')
-          .delete()
-          .eq('orderid', orderId);
-
-        return { error: detailsError };
+        return await this.deleteOrder(orderId);
       }
     }
 
@@ -84,6 +80,73 @@ export class OrdersService {
       .update(order)
       .eq('orderid', id);
     return { error };
+  }
+
+  async updateOrderWithDetails(order: Order): Promise<{ error?: any }> {
+
+    const { orderid, details, ...orderData } = order;
+
+    const { error: orderError } = await this.supabase
+      .from('rm_orders')
+      .update(orderData)
+      .eq('orderid', orderid);
+
+    if (orderError) {
+      return { error: orderError };
+    }
+
+    if (details && details.length > 0) {
+
+      const { data: existingDetails, error: existingDetailsError } = await this.supabase
+        .from('rm_orderdetails')
+        .select('orderdetailid')
+        .eq('orderid', orderid);
+
+      if (existingDetailsError) {
+        return { error: existingDetailsError };
+      }
+
+      const existingDetailIds: number[] = existingDetails.map((detail) => detail.orderdetailid);
+      const newDetailIds = details
+        .map((detail) => detail.orderdetailid)
+        .filter((id) => id > 0);
+
+      const detailsToDelete: number[] = existingDetailIds.filter((id) => !newDetailIds.includes(id));
+
+      if (detailsToDelete.length > 0) {
+        const { error: deleteError } = await this.supabase
+          .from('rm_orderdetails')
+          .delete()
+          .in('orderdetailid', detailsToDelete);
+
+        if (deleteError) {
+          return { error: deleteError };
+        }
+      }
+
+      for (const detail of details) {
+        if (detail.orderdetailid) {
+          const { error: updateDetailError } = await this.supabase
+            .from('rm_orderdetails')
+            .update(detail)
+            .eq('orderdetailid', detail.orderdetailid);
+
+          if (updateDetailError) {
+            return { error: updateDetailError };
+          }
+        } else {
+          const { error: insertDetailError } = await this.supabase
+            .from('rm_orderdetails')
+            .insert([{ ...detail, orderid }]);
+
+          if (insertDetailError) {
+            return { error: insertDetailError };
+          }
+        }
+      }
+    }
+
+    return { error: null };
   }
 
   async deleteOrder(id: number): Promise<{ error?: any }> {

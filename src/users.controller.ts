@@ -33,15 +33,8 @@ export class UsersController {
   }
 
   @Post('login')
-  async login(@Req() req: Request, @Res() res: Response): Promise<void> {
+  async login(@Req() req: Request): Promise<{ data?: User; error?: any }> {
     const { username, password } = req.body;
-    const { data, error } = await this.usersService.login(username, password);
-
-    if (error) {
-      res.status(400).json({error});
-      return;
-    }
-    res.status(200).json({data})
-    return;
+    return this.usersService.login(username, password);
   }
 }

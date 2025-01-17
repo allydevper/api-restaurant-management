@@ -17,14 +17,24 @@ export class OrdersService {
   async getOrders(): Promise<{ data: Order[]; error?: any }> {
     const { data, error } = await this.supabase
       .from('rm_orders')
-      .select('*');
+      .select(`
+        *,
+        tables : rm_tables (
+          tablenumber
+        )
+      `);
     return { data, error };
   }
 
   async getOrderById(id: number): Promise<{ data?: Order; error?: any }> {
     const { data, error } = await this.supabase
       .from('rm_orders')
-      .select('*')
+      .select(`
+        *,
+        tables : rm_tables (
+          tablenumber
+        )
+      `)
       .eq('orderid', id)
       .single();
     return { data, error };

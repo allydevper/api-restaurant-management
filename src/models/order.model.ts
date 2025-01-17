@@ -1,3 +1,5 @@
+import { OrderDetail } from "./orderDetail.model";
+
 export interface Order {
     orderid?: number;
     tableid?: number;
@@ -6,4 +8,5 @@ export interface Order {
     total?: number;
     status?: string;
     createdat?: Date;
+    details: OrderDetail[];
 }

@@ -13,6 +13,44 @@ export class OrdersService {
       .insert([order]);
     return { error };
   }
+  async createOrderWithDetails(order: Order): Promise<{ error?: any }> {
+
+    const { details, ...orderWithoutDetails } = order;
+
+    const { data: orderData, error: orderError } = await this.supabase
+      .from('rm_orders')
+      .insert([orderWithoutDetails])
+      .select('orderid')
+      .single();
+
+    if (orderError) {
+      return { error: orderError };
+    }
+
+    const orderId = orderData.orderid;
+
+    if (details && details.length > 0) {
+      const detailsWithOrderId = details.map((detail) => ({
+        ...detail,
+        orderid: orderId,
+      }));
+
+      const { error: detailsError } = await this.supabase
+        .from('rm_orderDetails')
+        .insert(detailsWithOrderId);
+
+      if (detailsError) {
+        await this.supabase
+          .from('rm_orders')
+          .delete()
+          .eq('orderid', orderId);
+
+        return { error: detailsError };
+      }
+    }
+
+    return { error: null };
+  }
 
   async getOrders(): Promise<{ data: Order[]; error?: any }> {
     const { data, error } = await this.supabase

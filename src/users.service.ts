@@ -22,17 +22,17 @@ export class UsersService {
   async getUsers(): Promise<{ data: User[]; error?: any }> {
     const { data, error } = await this.supabase
       .from('rm_users')
-      .select('*');
-    return { data, error };
+      .select('userid, username, role, createdat');
+    return { data: data as User[], error };
   }
 
   async getUserById(id: number): Promise<{ data?: User; error?: any }> {
     const { data, error } = await this.supabase
       .from('rm_users')
-      .select('*')
+      .select('userid, username, role, createdat')
       .eq('userid', id)
       .single();
-    return { data, error };
+    return { data: data as User, error };
   }
 
   async updateUser(id: number, user: User): Promise<{ error?: any }> {

@@ -31,9 +31,9 @@ export class OrdersController {
     return this.ordersService.updateOrder(id, order);
   }
 
-  @Put('details')
-  async updateOrderWithDetails(@Body() order: Order): Promise<{ error?: any }> {
-    return this.ordersService.updateOrderWithDetails(order);
+  @Put('details/:id')
+  async updateOrderWithDetails(@Param('id') id: number, @Body() order: Order): Promise<{ error?: any }> {
+    return this.ordersService.updateOrderWithDetails(id, order);
   }
 
   @Delete(':id')

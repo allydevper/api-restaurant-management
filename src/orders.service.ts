@@ -67,6 +67,9 @@ export class OrdersService {
         *,
         tables : rm_tables (
           tablenumber
+        ),
+        details: rm_orderdetails (
+          *
         )
       `)
       .eq('orderid', id)
@@ -82,14 +85,14 @@ export class OrdersService {
     return { error };
   }
 
-  async updateOrderWithDetails(order: Order): Promise<{ error?: any }> {
+  async updateOrderWithDetails(id: number, order: Order): Promise<{ error?: any }> {
 
-    const { orderid, details, ...orderData } = order;
+    const { details, ...orderData } = order;
 
     const { error: orderError } = await this.supabase
       .from('rm_orders')
       .update(orderData)
-      .eq('orderid', orderid);
+      .eq('orderid', id);
 
     if (orderError) {
       return { error: orderError };
@@ -100,7 +103,7 @@ export class OrdersService {
       const { data: existingDetails, error: existingDetailsError } = await this.supabase
         .from('rm_orderdetails')
         .select('orderdetailid')
-        .eq('orderid', orderid);
+        .eq('orderid', id);
 
       if (existingDetailsError) {
         return { error: existingDetailsError };
@@ -109,9 +112,9 @@ export class OrdersService {
       const existingDetailIds: number[] = existingDetails.map((detail) => detail.orderdetailid);
       const newDetailIds = details
         .map((detail) => detail.orderdetailid)
-        .filter((id) => id > 0);
+        .filter((orderdetailid) => orderdetailid > 0);
 
-      const detailsToDelete: number[] = existingDetailIds.filter((id) => !newDetailIds.includes(id));
+      const detailsToDelete: number[] = existingDetailIds.filter((orderdetailid) => !newDetailIds.includes(orderdetailid));
 
       if (detailsToDelete.length > 0) {
         const { error: deleteError } = await this.supabase
@@ -137,7 +140,7 @@ export class OrdersService {
         } else {
           const { error: insertDetailError } = await this.supabase
             .from('rm_orderdetails')
-            .insert([{ ...detail, orderid }]);
+            .insert([{ ...detail, orderid: id }]);
 
           if (insertDetailError) {
             return { error: insertDetailError };

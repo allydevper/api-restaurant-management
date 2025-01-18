@@ -24,7 +24,7 @@
 
 ## Descripción del Proyecto
 
-Este proyecto es una API de gestión de restaurantes construida con el framework [NestJS](https://nestjs.com/), que es un framework progresivo de Node.js para construir aplicaciones del lado del servidor eficientes y escalables.
+Este proyecto es una API Demo de gestión de restaurantes construida con el framework [NestJS](https://nestjs.com/), que es un framework progresivo de Node.js para construir aplicaciones del lado del servidor eficientes y escalables, y sirve para ser usado por la web https://github.com/allydevper/restaurant-management.
 
 ## Estructura del Proyecto
 

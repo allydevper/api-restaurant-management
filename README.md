@@ -22,9 +22,29 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Descripción del Proyecto
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este proyecto es una API de gestión de restaurantes construida con el framework [NestJS](https://nestjs.com/), que es un framework progresivo de Node.js para construir aplicaciones del lado del servidor eficientes y escalables.
+
+## Estructura del Proyecto
+
+El proyecto está organizado en varios controladores y servicios que manejan diferentes aspectos de la gestión del restaurante:
+
+### Controladores:
+- **app.controller.ts**: Controlador principal de la aplicación.
+- **dishes.controller.ts**: Maneja las operaciones relacionadas con los platos.
+- **orderDetails.controller.ts**: Gestiona los detalles de los pedidos.
+- **orders.controller.ts**: Controlador para las operaciones de pedidos.
+- **tables.controller.ts**: Administra las mesas del restaurante.
+- **users.controller.ts**: Controlador para la gestión de usuarios.
+
+### Servicios:
+- **app.service.ts**: Servicio principal de la aplicación.
+- **dishes.service.ts**: Lógica de negocio para los platos.
+- **orderDetails.service.ts**: Lógica de negocio para los detalles de los pedidos.
+- **orders.service.ts**: Lógica de negocio para los pedidos.
+- **tables.service.ts**: Lógica de negocio para las mesas.
+- **users.service.ts**: Lógica de negocio para los usuarios.
 
 ## Installation
 
@@ -57,6 +77,36 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## Instalación
+
+Para instalar las dependencias del proyecto, ejecuta:
+
+```bash
+npm install
+```
+
+## Ejecución
+
+Para ejecutar el servidor de desarrollo, utiliza:
+
+```bash
+npm run start:dev
+```
+
+Esto iniciará el servidor en modo de desarrollo.
+
+## Pruebas
+
+Para ejecutar las pruebas, usa:
+
+```bash
+npm run test
+```
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Por favor, sigue las guías de contribución y código de conducta del proyecto.
 
 ## Support
 

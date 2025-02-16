@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Inject } from '@nestjs/common';
-import { Table } from './models/table.model';
+import { Table } from './interface/table.interface';
 
 @Injectable()
 export class TablesService {

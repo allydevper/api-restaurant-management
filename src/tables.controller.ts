@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { TablesService } from './tables.service';
-import { Table } from './models/table.model';
+import { Table } from './interface/table.interface';
 
 @Controller('tables')
 export class TablesController {

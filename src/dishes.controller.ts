@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { DishesService } from './dishes.service';
-import { Dish } from './models/dish.model';
+import { Dish } from './interface/dish.interface';
 
 @Controller('dishes')
 export class DishesController {

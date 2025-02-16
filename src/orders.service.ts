@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Inject } from '@nestjs/common';
-import { Order } from './models/order.model';
-import { OrderDetail } from './models/orderDetail.model';
+import { Order } from './interface/order.interface';
 
 @Injectable()
 export class OrdersService {

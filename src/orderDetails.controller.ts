@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
 import { OrderDetailsService } from './orderDetails.service';
-import { OrderDetail } from './models/orderDetail.model';
+import { OrderDetail } from './interface/orderdetail.interface';
 
 @Controller('order-details')
 export class OrderDetailsController {

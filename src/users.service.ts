@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Inject } from '@nestjs/common';
-import { User } from './models/user.model';
+import { User } from './interface/user.interface';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

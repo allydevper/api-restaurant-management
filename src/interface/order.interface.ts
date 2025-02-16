@@ -1,4 +1,4 @@
-import { OrderDetail } from "./orderDetail.model";
+import { OrderDetail } from "./orderdetail.interface";
 
 export interface Order {
     orderid?: number;

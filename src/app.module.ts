@@ -16,7 +16,7 @@ import { createClient } from '@supabase/supabase-js';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env.dev',
+      envFilePath: '.env',
     }),
   ],
   controllers: [

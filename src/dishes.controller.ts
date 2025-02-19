@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { DishesService } from './dishes.service';
 import { Dish } from './interface/dish.interface';
 
@@ -16,18 +16,23 @@ export class DishesController {
     return this.dishesService.getDishes();
   }
 
+  @Get(':page/:pageSize')
+  async getDishesByPage(@Param('page', ParseIntPipe) page: number, @Param('pageSize', ParseIntPipe) pageSize: number): Promise<{ error?: any }> {
+    return this.dishesService.getDishesByPage(page, pageSize);
+  }
+
   @Get(':id')
-  async getDish(@Param('id') id: number): Promise<{ data?: Dish; error?: any }> {
+  async getDish(@Param('id', ParseIntPipe) id: number): Promise<{ data?: Dish; error?: any }> {
     return this.dishesService.getDish(id);
   }
 
   @Put(':id')
-  async updateDish(@Param('id') id: number, @Body() dish: Dish): Promise<{ error?: any }> {
+  async updateDish(@Param('id', ParseIntPipe) id: number, @Body() dish: Dish): Promise<{ error?: any }> {
     return this.dishesService.updateDish(id, dish);
   }
 
   @Delete(':id')
-  async deleteDish(@Param('id') id: number): Promise<{ error?: any }> {
+  async deleteDish(@Param('id', ParseIntPipe) id: number): Promise<{ error?: any }> {
     return this.dishesService.deleteDish(id);
   }
 }

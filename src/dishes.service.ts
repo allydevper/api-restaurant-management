@@ -20,21 +20,21 @@ export class DishesService {
     return { data, error };
   }
 
-  async getDishesByPage(page: number = 1, pageSize: number = 10): Promise<{ data: Dish[]; error?: any }> {
+  async getDishesByPage(page: number = 1, pageSize: number = 10): Promise<{ data: Dish[]; count: number; error?: any }> {
     const from = (page - 1) * pageSize;
     const to = from + pageSize - 1;
 
-    const { data, error } = await this.supabase
+    const { count, data, error } = await this.supabase
       .from('rm_dishes')
       .select(`
         *,
         dishescategory : rm_dishescategory (
           name
         )
-      `)
+      `, { count: 'exact' })
       .order('createdat', { ascending: false, nullsFirst: false })
       .range(from, to);
-    return { data, error };
+    return { data, count, error };
   }
 
   async getDish(id: number): Promise<{ data?: Dish; error?: any }> {

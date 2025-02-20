@@ -7,13 +7,6 @@ import { OrderDetail } from './interface/orderdetail.interface';
 export class OrderDetailsService {
   constructor(@Inject('SUPABASE_CLIENT') private readonly supabase: SupabaseClient) { }
 
-  async createOrderDetail(orderDetail: OrderDetail): Promise<{ error?: any }> {
-    const { error } = await this.supabase
-      .from('rm_orderDetails')
-      .insert([orderDetail]);
-    return { error };
-  }
-
   async getOrderDetails(): Promise<{ data: OrderDetail[]; error?: any }> {
     const { data, error } = await this.supabase
       .from('rm_orderDetails')
@@ -28,6 +21,13 @@ export class OrderDetailsService {
       .eq('orderdetailid', id)
       .single();
     return { data, error };
+  }
+
+  async createOrderDetail(orderDetail: OrderDetail): Promise<{ error?: any }> {
+    const { error } = await this.supabase
+      .from('rm_orderDetails')
+      .insert([orderDetail]);
+    return { error };
   }
 
   async updateOrderDetail(id: number, orderDetail: OrderDetail): Promise<{ error?: any }> {

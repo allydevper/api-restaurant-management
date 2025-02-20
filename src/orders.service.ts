@@ -7,14 +7,72 @@ import { Order } from './interface/order.interface';
 export class OrdersService {
   constructor(@Inject('SUPABASE_CLIENT') private readonly supabase: SupabaseClient) { }
 
+  async getOrders(): Promise<{ data: Order[]; error?: any }> {
+    const { data, error } = await this.supabase
+      .from('rm_orders')
+      .select(`
+        *,
+        tables : rm_tables (
+          tablenumber
+        )
+      `)
+      .order('createdat', { ascending: false, nullsFirst: false });
+    return { data, error };
+  }
+
+  async getOrdersByPage(page: number = 1, pageSize: number = 10): Promise<{ data: Order[]; count: number; error?: any }> {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+
+    const { count, data, error } = await this.supabase
+      .from('rm_orders')
+      .select(`*, tables : rm_tables (tablenumber)`, { count: 'exact' })
+      .order('createdat', { ascending: false, nullsFirst: false })
+      .range(from, to);
+    return { data, count, error };
+  }
+
+  async getOrderById(id: number): Promise<{ data?: Order; error?: any }> {
+    const { data, error } = await this.supabase
+      .from('rm_orders')
+      .select(`
+        *,
+        tables : rm_tables (
+          tablenumber
+        ),
+        details: rm_orderdetails (
+          *
+        )
+      `)
+      .eq('orderid', id)
+      .single();
+    return { data, error };
+  }
+
   async createOrder(order: Order): Promise<{ error?: any }> {
     const { error } = await this.supabase
       .from('rm_orders')
       .insert([order]);
     return { error };
   }
-  async createOrderWithDetails(order: Order): Promise<{ error?: any }> {
 
+  async updateOrder(id: number, order: Order): Promise<{ error?: any }> {
+    const { error } = await this.supabase
+      .from('rm_orders')
+      .update(order)
+      .eq('orderid', id);
+    return { error };
+  }
+
+  async deleteOrder(id: number): Promise<{ error?: any }> {
+    const { error } = await this.supabase
+      .from('rm_orders')
+      .delete()
+      .eq('orderid', id);
+    return { error };
+  }
+
+  async createOrderWithDetails(order: Order): Promise<{ error?: any }> {
     const { details, ...orderWithoutDetails } = order;
 
     const { data: orderData, error: orderError } = await this.supabase
@@ -47,45 +105,7 @@ export class OrdersService {
     return { error: null };
   }
 
-  async getOrders(): Promise<{ data: Order[]; error?: any }> {
-    const { data, error } = await this.supabase
-      .from('rm_orders')
-      .select(`
-        *,
-        tables : rm_tables (
-          tablenumber
-        )
-      `);
-    return { data, error };
-  }
-
-  async getOrderById(id: number): Promise<{ data?: Order; error?: any }> {
-    const { data, error } = await this.supabase
-      .from('rm_orders')
-      .select(`
-        *,
-        tables : rm_tables (
-          tablenumber
-        ),
-        details: rm_orderdetails (
-          *
-        )
-      `)
-      .eq('orderid', id)
-      .single();
-    return { data, error };
-  }
-
-  async updateOrder(id: number, order: Order): Promise<{ error?: any }> {
-    const { error } = await this.supabase
-      .from('rm_orders')
-      .update(order)
-      .eq('orderid', id);
-    return { error };
-  }
-
   async updateOrderWithDetails(id: number, order: Order): Promise<{ error?: any }> {
-
     const { details, ...orderData } = order;
 
     const { error: orderError } = await this.supabase
@@ -98,7 +118,6 @@ export class OrdersService {
     }
 
     if (details && details.length > 0) {
-
       const { data: existingDetails, error: existingDetailsError } = await this.supabase
         .from('rm_orderdetails')
         .select('orderdetailid')
@@ -149,13 +168,5 @@ export class OrdersService {
     }
 
     return { error: null };
-  }
-
-  async deleteOrder(id: number): Promise<{ error?: any }> {
-    const { error } = await this.supabase
-      .from('rm_orders')
-      .delete()
-      .eq('orderid', id);
-    return { error };
   }
 }

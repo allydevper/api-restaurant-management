@@ -7,13 +7,6 @@ import { Table } from './interface/table.interface';
 export class TablesService {
   constructor(@Inject('SUPABASE_CLIENT') private readonly supabase: SupabaseClient) { }
 
-  async createTable(table: Table): Promise<{ error?: any }> {
-    const { error } = await this.supabase
-      .from('rm_tables')
-      .insert([table]);
-    return { error };
-  }
-
   async getTables(): Promise<{ data: Table[]; error?: any }> {
     const { data, error } = await this.supabase
       .from('rm_tables')
@@ -28,6 +21,13 @@ export class TablesService {
       .eq('tableid', id)
       .single();
     return { data, error };
+  }
+
+  async createTable(table: Table): Promise<{ error?: any }> {
+    const { error } = await this.supabase
+      .from('rm_tables')
+      .insert([table]);
+    return { error };
   }
 
   async updateTable(id: number, table: Table): Promise<{ error?: any }> {

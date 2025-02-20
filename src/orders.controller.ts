@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { Order } from './interface/order.interface';
 
@@ -6,24 +6,29 @@ import { Order } from './interface/order.interface';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) { }
 
-  @Post()
-  async createOrder(@Body() order: Order): Promise<{ error?: any }> {
-    return this.ordersService.createOrder(order);
-  }
-
-  @Post('details')
-  async createOrderWithDetails(@Body() order: Order): Promise<{ error?: any }> {
-    return this.ordersService.createOrderWithDetails(order);
-  }
-
   @Get()
   async getOrders(): Promise<{ data: Order[]; error?: any }> {
     return this.ordersService.getOrders();
   }
 
+  @Get(':page/:pageSize')
+  async getOrdersByPage(@Param('page', ParseIntPipe) page: number, @Param('pageSize', ParseIntPipe) pageSize: number): Promise<{ error?: any }> {
+    return this.ordersService.getOrdersByPage(page, pageSize);
+  }
+
+  @Post()
+  async createOrder(@Body() order: Order): Promise<{ error?: any }> {
+    return this.ordersService.createOrder(order);
+  }
+
   @Get(':id')
   async getOrder(@Param('id') id: number): Promise<{ data?: Order; error?: any }> {
     return this.ordersService.getOrderById(id);
+  }
+
+  @Post('details')
+  async createOrderWithDetails(@Body() order: Order): Promise<{ error?: any }> {
+    return this.ordersService.createOrderWithDetails(order);
   }
 
   @Put(':id')

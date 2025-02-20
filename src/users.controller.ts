@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Req, Res, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './interface/user.interface';
 import { Request } from 'express';
@@ -7,19 +7,24 @@ import { Request } from 'express';
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
-  @Post()
-  async createUser(@Body() user: User): Promise<{ error?: any }> {
-    return this.usersService.createUser(user);
-  }
-
   @Get()
   async getUsers(): Promise<{ data: User[]; error?: any }> {
     return this.usersService.getUsers();
   }
 
+  @Get(':page/:pageSize')
+  async getUsersByPage(@Param('page', ParseIntPipe) page: number, @Param('pageSize', ParseIntPipe) pageSize: number): Promise<{ error?: any }> {
+    return this.usersService.getUsersByPage(page, pageSize);
+  }
+
   @Get(':id')
   async getUser(@Param('id') id: number): Promise<{ data?: User; error?: any }> {
     return this.usersService.getUserById(id);
+  }
+
+  @Post()
+  async createUser(@Body() user: User): Promise<{ error?: any }> {
+    return this.usersService.createUser(user);
   }
 
   @Put(':id')

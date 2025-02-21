@@ -11,6 +11,8 @@ import { TablesService } from './tables.service';
 import { DishesService } from './dishes.service';
 import { UsersService } from './users.service';
 import { createClient } from '@supabase/supabase-js';
+import { DashboardController } from './dashboard.controller';
+import { DashboardService } from './dashboard.service';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { createClient } from '@supabase/supabase-js';
     TablesController,
     DishesController,
     UsersController,
+    DashboardController
   ],
   providers: [
     {
@@ -41,6 +44,7 @@ import { createClient } from '@supabase/supabase-js';
     TablesService,
     DishesService,
     UsersService,
+    DashboardService
   ],
 })
 export class AppModule { }

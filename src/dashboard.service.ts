@@ -23,7 +23,7 @@ export class DashboardService {
     async getOrders(): Promise<{ totalOrders: number; totalIncome: number; error?: any }> {
         const { data, error } = await this.supabase
             .from('rm_orders')
-            .select('total, id');
+            .select('total, orderid');
 
         if (error) {
             return { totalOrders: 0, totalIncome: 0, error };

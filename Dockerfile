@@ -20,7 +20,7 @@ COPY . .
 RUN npm run build
 
 # Usa una imagen más ligera para producción
-FROM base
+FROM node:${NODE_VERSION}-slim AS production
 
 # Establece el directorio de trabajo
 WORKDIR /app

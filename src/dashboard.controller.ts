@@ -10,13 +10,13 @@ export class DashboardController {
         return this.dashboardService.getTables();
     }
 
-    @Get('orders')
-    async getOrders() {
-        return this.dashboardService.getOrders();
-    }
-
     @Get('dishes')
     async getDishes() {
         return this.dashboardService.getDishes();
+    }
+
+    @Get('orders')
+    async getOrders() {
+        return this.dashboardService.getOrders();
     }
 } 
